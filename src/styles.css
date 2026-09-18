@@ -5,6 +5,8 @@
   --primary: #075985;
   --secondary: #0d9488;
   --accent: #f59e0b;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
   --border: #d9e2ef;
 }
 
@@ -18,7 +20,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -29,6 +32,21 @@ button {
   background: #ffffff;
   color: #172033;
   cursor: pointer;
+  padding: 0 12px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+select {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  padding: 0 12px;
+  background: #ffffff;
 }
 
 .app {
@@ -68,15 +86,16 @@ button {
 }
 
 .hero h1 {
-  font-size: clamp(34px, 6vw, 62px);
-  line-height: 1;
+  font-size: clamp(28px, 5vw, 48px);
+  line-height: 1.05;
   letter-spacing: 0;
 }
 
 .hero span {
-  max-width: 860px;
+  max-width: 920px;
   color: #526071;
   line-height: 1.75;
+  font-size: 14px;
 }
 
 .metrics {
@@ -101,6 +120,10 @@ button {
   font-size: 30px;
 }
 
+.metric-warn {
+  color: var(--danger);
+}
+
 .workspace {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -110,6 +133,7 @@ button {
 
 .panel {
   padding: 22px;
+  margin-bottom: 18px;
 }
 
 .panel h2,
@@ -130,6 +154,13 @@ button {
   background: color-mix(in srgb, var(--primary) 8%, #ffffff);
 }
 
+.chips button.chip-on {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 700;
+}
+
 .heading {
   display: flex;
   align-items: start;
@@ -147,6 +178,25 @@ button {
   color: #ffffff;
   border-color: var(--primary);
   padding: 0 14px;
+  font-weight: 700;
+}
+
+.danger-btn {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+  font-weight: 700;
+}
+
+.ghost-btn {
+  background: #f1f5f9;
+}
+
+.leak-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #172033;
+  font-weight: 700;
 }
 
 .field-grid {
@@ -171,6 +221,11 @@ input {
   border-radius: 7px;
   border: 1px solid var(--border);
   padding: 0 12px;
+}
+
+.form-submit {
+  grid-column: 1 / -1;
+  min-height: 44px;
 }
 
 .records {
@@ -208,10 +263,523 @@ input {
   line-height: 1.6;
 }
 
+.muted {
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* ---------- 应急闭锁横幅 ---------- */
+
+.lockout-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.banner-ok {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.banner-active {
+  background: var(--danger-bg);
+  border-color: #fca5a5;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12); }
+  50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.2); }
+}
+
+.banner-status {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.banner-icon {
+  font-size: 34px;
+}
+
+.banner-status h2 {
+  margin: 0 0 4px;
+  font-size: 19px;
+}
+
+.banner-status p {
+  margin: 0;
+  color: #526071;
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 680px;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ---------- 主管面板 ---------- */
+
+.lockout-panel {
+  border: 2px solid var(--danger);
+  background: #fffbfb;
+}
+
+.incident-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.supervisor-head h3 {
+  margin-bottom: 4px;
+  color: var(--danger);
+}
+
+.supervisor-head p {
+  margin: 0 0 12px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.trigger-list {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.trigger-row,
+.reset-row {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--danger-bg);
+  border: 1px dashed #fca5a5;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.reset-row {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.trigger-row span,
+.reset-row span {
+  color: #526071;
+}
+
+.finding {
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border: 1px solid;
+}
+
+.finding p {
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+.finding-pass {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+}
+
+.finding-fail {
+  background: var(--danger-bg);
+  border-color: #fca5a5;
+}
+
+.finding-note {
+  color: #526071;
+}
+
+.finding-form {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.seg {
+  display: flex;
+  gap: 8px;
+}
+
+.seg button {
+  flex: 1;
+}
+
+.seg-on.seg-pass {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.seg-on.seg-fail {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+  font-weight: 700;
+}
+
+.supervisor > label {
+  margin-bottom: 12px;
+}
+
+.reset-history {
+  margin-top: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.pass-text { color: var(--secondary); }
+.fail-text { color: var(--danger); }
+
+/* ---------- 气源批次 ---------- */
+
+.batch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.batch-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfdff;
+}
+
+.batch-frozen {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.batch-condemned {
+  border-color: #7f1d1d;
+  background: #fee2e2;
+}
+
+.batch-released {
+  border-color: var(--secondary);
+  background: #f0fdfa;
+}
+
+.batch-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.batch-head h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.batch-tag {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.batch-tag-open { background: #ccfbf1; color: #115e59; }
+.batch-tag-frozen { background: var(--danger); color: #fff; }
+.batch-tag-released { background: var(--secondary); color: #fff; }
+.batch-tag-condemned { background: #7f1d1d; color: #fff; }
+
+.batch-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.mini-count {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.batch-incident {
+  margin: 10px 0 0 !important;
+  font-size: 12px;
+  color: var(--danger) !important;
+  font-weight: 600;
+}
+
+/* ---------- 工单卡片 ---------- */
+
+.orders {
+  gap: 14px;
+}
+
+.order-card {
+  display: block !important;
+  padding: 16px 18px !important;
+}
+
+.order-locked {
+  border-color: #fca5a5;
+  background: #fffafa;
+}
+
+.order-filling {
+  border-color: var(--secondary);
+}
+
+.order-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.order-title h3 {
+  margin: 0;
+}
+
+.tag {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.tag-queued { background: #e0f2fe; color: #075985; }
+.tag-suspended { background: #fde68a; color: #92400e; }
+.tag-filling { background: #ccfbf1; color: #115e59; }
+.tag-held { background: var(--danger); color: #fff; }
+.tag-recheck { background: #ffedd5; color: #9a3412; }
+.tag-completed { background: #dbeafe; color: #1e40af; }
+.tag-signed { background: #dcfce7; color: #166534; }
+.tag-rejected { background: #7f1d1d; color: #fff; }
+.tag-expired { background: #fee2e2; color: #991b1b; }
+.tag-expiring { background: #fef3c7; color: #92400e; }
+
+.order-meta {
+  margin: 6px 0 2px !important;
+  font-size: 13px;
+}
+
+.mix-hint {
+  font-size: 12.5px !important;
+  color: #0f766e !important;
+  margin: 0 0 10px !important;
+}
+
+.pressure-row {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 0;
+}
+
+.pressure-row small {
+  display: block;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.pressure-row strong {
+  font-size: 18px;
+}
+
+.frozen-pressure {
+  color: var(--danger);
+}
+
+.spark-wrap {
+  flex: 1;
+  min-width: 200px;
+}
+
+.spark {
+  width: 100%;
+  height: 56px;
+}
+
+.spark path {
+  stroke: var(--primary);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.spark-danger path {
+  stroke: var(--danger);
+}
+
+.target-line {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.alarm-inline {
+  margin: 4px 0 !important;
+  color: var(--danger) !important;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.order-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.sign-input {
+  width: 180px;
+  min-height: 38px;
+}
+
+.lock-note {
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+.history-toggle {
+  margin-left: auto;
+}
+
+.history-panel {
+  margin-top: 12px;
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+  display: grid;
+  gap: 6px;
+}
+
+.history-row {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  align-items: baseline;
+}
+
+.history-row span {
+  color: #94a3b8;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.history-row p {
+  margin: 0;
+  color: #334155;
+}
+
+.pressure-log summary {
+  cursor: pointer;
+  color: var(--primary);
+  font-size: 13px;
+}
+
+.log-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2px 14px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 侧边规则 ---------- */
+
+.rules {
+  margin-top: 22px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.rules h3 {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.rules ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #526071;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+/* ---------- 事故历史 ---------- */
+
+.incident-log {
+  display: grid;
+  gap: 8px;
+}
+
+.incident-item summary {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfdff;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.incident-item[open] summary {
+  border-color: var(--primary);
+}
+
+.incident-item summary span {
+  color: #64748b;
+}
+
+.inc-state {
+  margin-left: auto;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.inc-state-active, .inc-state-reopened { background: var(--danger); color: #fff; }
+.inc-state-reset { background: var(--secondary); color: #fff; }
+.inc-state-failed { background: #7f1d1d; color: #fff; }
+
+.incident-body {
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+}
+
 @media (max-width: 860px) {
   .metrics,
   .workspace,
-  .field-grid {
+  .field-grid,
+  .batch-grid,
+  .finding-form {
     grid-template-columns: 1fr;
   }
 
